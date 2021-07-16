@@ -34,9 +34,7 @@ public class Client {
             direccionServidor = InetAddress.getByName("localhost");
             socketUDP = new DatagramSocket();
             
-            sendHello();
-            receiveHello();
-            closeSocket();
+
         } catch (UnknownHostException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SocketException ex) {
