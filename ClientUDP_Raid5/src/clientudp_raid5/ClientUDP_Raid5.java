@@ -6,6 +6,7 @@
 package clientudp_raid5;
 
 import Client.Client;
+import GUI.MainWindow;
 
 /**
  *
@@ -17,7 +18,14 @@ public class ClientUDP_Raid5 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        /*
+        Create client in port 5000
+        */
         Client client = new Client(5000);
+        /*
+        Create Window and send for parameters the client
+        */
+        MainWindow window = new MainWindow(client);
     }
     
 }
