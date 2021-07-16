@@ -5,6 +5,11 @@
  */
 package Client;
 
+import Utility.MyUtility;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -19,21 +24,28 @@ import java.util.logging.Logger;
  * @author mario
  */
 public class Client {
+
     private int SERVER_PORT;
     private byte[] buffer;
-    InetAddress direccionServidor;
-    DatagramSocket socketUDP;
-    DatagramPacket pregunta;
-    DatagramPacket peticion;
-    String mensaje;
-    
-    public Client(int port){
+
+    /*
+    Variables for the connection to the server.
+    */
+    InetAddress serverAddress;
+    DatagramSocket UDPSocket;
+    DatagramPacket question;
+    DatagramPacket petition;
+    String message;
+
+    public Client(int port) {
         try {
+            /*
+            Inicializate the variables with the srver information.
+            */
             this.SERVER_PORT = port;
             buffer = new byte[1024];
-            direccionServidor = InetAddress.getByName("localhost");
-            socketUDP = new DatagramSocket();
-            
+            serverAddress = InetAddress.getByName("localhost");
+            UDPSocket = new DatagramSocket();
 
         } catch (UnknownHostException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -41,30 +53,53 @@ public class Client {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void sendHello(){
+
+    public void sendHello() {
         try {
-            mensaje = "¡Hola mundo desde el cliente!";
-            buffer = mensaje.getBytes();
-            pregunta = new DatagramPacket(buffer, buffer.length, direccionServidor, SERVER_PORT);
-            socketUDP.send(pregunta);         
+            message = "¡Hello world from the client!";
+            buffer = message.getBytes();
+            question = new DatagramPacket(buffer, buffer.length, serverAddress, SERVER_PORT);
+            UDPSocket.send(question);
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-      
-    public void receiveHello(){
+
+    public void receiveHello() {
         try {
-            peticion = new DatagramPacket(buffer, buffer.length);
-            socketUDP.receive(peticion);
-            mensaje = new String(peticion.getData());
-            System.out.println(mensaje);
+            petition = new DatagramPacket(buffer, buffer.length);
+            UDPSocket.receive(petition);
+            message = new String(petition.getData());
+            System.out.println(message);
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void closeSocket(){
-        socketUDP.close();
+
+    public void stockFile() {
+        /*
+        This method send the action to the server, for stock the file
+        */
+        send(MyUtility.STOCKFILE);
     }
+    
+    public void send(String msj) {
+        /*
+        This method send the meessage, whatever string
+        */
+        try {
+            buffer = new byte[msj.length()];
+            message = msj;
+            buffer = message.getBytes();
+            question = new DatagramPacket(buffer, buffer.length, serverAddress, SERVER_PORT);
+            UDPSocket.send(question);
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void closeSocket() {
+        UDPSocket.close();
+    }
+
 }

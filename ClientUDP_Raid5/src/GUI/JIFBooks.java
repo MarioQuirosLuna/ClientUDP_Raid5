@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -41,6 +42,10 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
     private JFileChooser jchooser = null;
     private JIFTable tablePanel;
     private JPanel jpFile;
+    
+    private File book = null;
+    private int bookSize = 0;
+    private String bookName = "";
     
     
 
@@ -126,13 +131,32 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
         int returnVal = this.jchooser.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             System.out.println("Choosed File "+ this.jchooser.getSelectedFile().getAbsolutePath());
+            MainWindow.client.stockFile();
             sendFile(this.jchooser.getSelectedFile().getAbsolutePath());
         }
     }
     
     public void sendFile(String filePath) throws IOException{
 
+        this.book = new File(filePath);
+        this.bookSize = (int) this.book.length();
+        this.bookName = this.book.getName();
+
+        MainWindow.client.send(this.bookName);
+        MainWindow.client.send(String.valueOf(this.bookSize));
+
+        Scanner s = new Scanner(book);
+        String contents = "";
         
+	//Read line to line the file
+	while (s.hasNextLine()) {
+            String line = s.nextLine();
+            contents += line; //Save the line in the contents.
+	}
+        
+        System.out.println(contents);
+        
+        MainWindow.client.send(contents);
         
     }
     
