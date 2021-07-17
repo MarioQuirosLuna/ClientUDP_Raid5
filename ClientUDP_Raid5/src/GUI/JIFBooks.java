@@ -118,10 +118,15 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
                 }
             }else{
                 if(e.getSource() == this.btnGetFile){
-                    receiveFile();
+                    //receiveFile();
+                    this.dispose();
+                }else{
+                if(e.getSource() == this.btnGetFilesName){
+                    receiveFiles();
                     this.dispose();
                 }
-            } 
+            }
+            }
         }
     }
     
@@ -148,15 +153,26 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
         Scanner s = new Scanner(book);
         String contents = "";
         
-	//Read line to line the file
+	/*
+        Read line to line the file
+        */
 	while (s.hasNextLine()) {
             String line = s.nextLine();
-            contents += line; //Save the line in the contents.
+            /*
+            Save the line in the contents.
+            */
+            contents += line; 
 	}
         
         System.out.println(contents);
         
         MainWindow.client.send(contents);
+        
+    }
+    
+    public void receiveFiles(){
+        
+        MainWindow.client.getFilesNames();
         
     }
     

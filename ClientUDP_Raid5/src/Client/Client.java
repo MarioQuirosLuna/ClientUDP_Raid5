@@ -69,24 +69,33 @@ public class Client {
         try {
             petition = new DatagramPacket(buffer, buffer.length);
             UDPSocket.receive(petition);
-            message = new String(petition.getData());
+            message = new String(petition.getData(),0,petition.getLength());
             System.out.println(message);
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
+    /*
+    This method send the action to the server, for stock the file
+    */
     public void stockFile() {
-        /*
-        This method send the action to the server, for stock the file
-        */
         send(MyUtility.STOCKFILE);
     }
     
+    /*
+    This method send the action to the server, for get the file names
+    */
+    public void getFilesNames(){
+        send(MyUtility.GETFILENAMES);
+    }
+    
+
+    /**
+     * This method send the meessage, whatever string
+     * @param msj : the message to send
+     */
     public void send(String msj) {
-        /*
-        This method send the meessage, whatever string
-        */
         try {
             buffer = new byte[msj.length()];
             message = msj;
@@ -96,6 +105,36 @@ public class Client {
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    /**
+     *  This method receive the actions and sizes
+     */
+    public void receive() {
+        try {
+            petition = new DatagramPacket(buffer, buffer.length);
+            UDPSocket.receive(petition);
+            message = new String(petition.getData(),0,petition.getLength());
+            System.out.println(message);
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    /**
+     * This method receive the files and return it
+     * @return 
+     */
+    public String receiveFiles() {
+        try {
+            petition = new DatagramPacket(buffer, buffer.length);
+            UDPSocket.receive(petition);
+            message = new String(petition.getData(),0,petition.getLength());
+            System.out.println(message);
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return message;
     }
 
     public void closeSocket() {
