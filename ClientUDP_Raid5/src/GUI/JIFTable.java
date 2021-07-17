@@ -22,21 +22,21 @@ import javax.swing.table.DefaultTableModel;
  */
 public class JIFTable extends JPanel{
     
-    JScrollPane scroll;
+        JScrollPane scroll;
 	JTable table;
 	String[] books;
 
 	public JIFTable() {
 		this.setLayout(null);
 		this.setBounds(10, 10, 360, 400);
-		
+		this.books = MainWindow.client.receiveFiles();
 		init();
 		this.setVisible(true);
 	}
 
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
+		getBooks();
 		repaint();
 	}
 
@@ -67,6 +67,21 @@ public class JIFTable extends JPanel{
 
 	}
 
+        public void getBooks(){
+            this.books = MainWindow.client.receiveFiles();
+            DefaultTableModel defaultTableModel = (DefaultTableModel) this.table.getModel();
+
+		clean();
+
+		for (int i = 0; i < this.books.length; i++) {
+
+			String[] data = new String[1];
+			data[0] = this.books[i];
+			defaultTableModel.addRow(data);
+
+		}
+        }
+        
 	public void clean() {
 		DefaultTableModel tb = (DefaultTableModel) this.table.getModel();
 		int a = this.table.getRowCount() - 1;

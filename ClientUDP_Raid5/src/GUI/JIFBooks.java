@@ -122,8 +122,9 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
                     this.dispose();
                 }else{
                 if(e.getSource() == this.btnGetFilesName){
-                    receiveFiles();
-                    this.dispose();
+//                    this.tablePanel.clean();
+//                    this.tablePanel.getBooks();
+                    
                 }
             }
             }
@@ -167,12 +168,6 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
         System.out.println(contents);
         
         MainWindow.client.send(contents);
-        
-    }
-    
-    public void receiveFiles(){
-        
-        MainWindow.client.getFilesNames();
         
     }
     

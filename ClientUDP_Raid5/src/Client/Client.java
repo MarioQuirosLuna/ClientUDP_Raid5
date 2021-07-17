@@ -36,6 +36,7 @@ public class Client {
     DatagramPacket question;
     DatagramPacket petition;
     String message;
+    private String[] books;
 
     public Client(int port) {
         try {
@@ -110,31 +111,31 @@ public class Client {
     /**
      *  This method receive the actions and sizes
      */
-    public void receive() {
+    public String receive() {
         try {
             petition = new DatagramPacket(buffer, buffer.length);
             UDPSocket.receive(petition);
             message = new String(petition.getData(),0,petition.getLength());
             System.out.println(message);
+            return message;
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
     }
     
     /**
      * This method receive the files and return it
      * @return 
      */
-    public String receiveFiles() {
-        try {
-            petition = new DatagramPacket(buffer, buffer.length);
-            UDPSocket.receive(petition);
-            message = new String(petition.getData(),0,petition.getLength());
-            System.out.println(message);
-        } catch (IOException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+    public String[] receiveFiles() {
+        getFilesNames();
+        int size = Integer.parseInt(receive());
+        this.books = new String[size];
+        for(int i = 0 ; i < size ; i++){
+            this.books[i] = receive();
         }
-        return message;
+        return this.books;
     }
 
     public void closeSocket() {
