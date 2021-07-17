@@ -122,8 +122,8 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
                     this.dispose();
                 }else{
                 if(e.getSource() == this.btnGetFilesName){
-//                    this.tablePanel.clean();
-//                    this.tablePanel.getBooks();
+                    this.tablePanel.clean();
+                    this.tablePanel.getBooks();
                     
                 }
             }

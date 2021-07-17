@@ -29,14 +29,14 @@ public class JIFTable extends JPanel{
 	public JIFTable() {
 		this.setLayout(null);
 		this.setBounds(10, 10, 360, 400);
-		this.books = MainWindow.client.receiveFiles();
 		init();
+                getBooks();
 		this.setVisible(true);
 	}
 
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		getBooks();
+		
 		repaint();
 	}
 
