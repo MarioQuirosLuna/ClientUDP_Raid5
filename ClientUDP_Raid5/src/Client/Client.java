@@ -6,6 +6,7 @@
 package Client;
 
 import Utility.MyUtility;
+import java.io.File;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -23,16 +24,17 @@ public class Client {
 
     private int SERVER_PORT;
     private byte[] buffer;
-
+    private String[] books;
+    
     /*
     Variables for the connection to the server.
     */
     InetAddress serverAddress;
-    DatagramSocket UDPSocket;
+    DatagramSocket socketUDP;
     DatagramPacket question;
     DatagramPacket petition;
     String message;
-    private String[] books;
+    
 
     public Client(int port) {
         try {
@@ -41,33 +43,11 @@ public class Client {
             */
             this.SERVER_PORT = port;
             serverAddress = InetAddress.getByName("localhost");
-            UDPSocket = new DatagramSocket();
+            socketUDP = new DatagramSocket();
 
         } catch (UnknownHostException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SocketException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void sendHello() {
-        try {
-            message = "¡Hello world from the client!";
-            buffer = message.getBytes();
-            question = new DatagramPacket(buffer, buffer.length, serverAddress, SERVER_PORT);
-            UDPSocket.send(question);
-        } catch (IOException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void receiveHello() {
-        try {
-            petition = new DatagramPacket(buffer, buffer.length);
-            UDPSocket.receive(petition);
-            message = new String(petition.getData(),0,petition.getLength());
-            System.out.println(message);
-        } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -86,6 +66,13 @@ public class Client {
         send(MyUtility.GETFILENAMES);
     }
     
+    public void getFile(){
+        send(MyUtility.GETFILE);
+    }
+    
+    public void getFileName(){
+        send(MyUtility.GETFILENAME);
+    }
 
     /**
      * This method send the meessage, whatever string
@@ -97,7 +84,7 @@ public class Client {
             message = msj;
             buffer = message.getBytes();
             question = new DatagramPacket(buffer, buffer.length, serverAddress, SERVER_PORT);
-            UDPSocket.send(question);
+            socketUDP.send(question);
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -110,7 +97,7 @@ public class Client {
         buffer = new byte[1024];
         try {
             petition = new DatagramPacket(buffer, buffer.length);
-            UDPSocket.receive(petition);
+            socketUDP.receive(petition);
             message = new String(petition.getData(),0,petition.getLength());
             System.out.println(message);
             return message;
@@ -133,9 +120,16 @@ public class Client {
         }
         return this.books;
     }
+    
+    public String receiveFile(String fileName) {
+        getFile();
+        send(fileName);
+        String book = receive();
+        return book;
+    }
 
     public void closeSocket() {
-        UDPSocket.close();
+        socketUDP.close();
     }
 
 }
