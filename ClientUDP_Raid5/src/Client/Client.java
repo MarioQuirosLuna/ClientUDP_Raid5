@@ -66,10 +66,16 @@ public class Client {
         send(MyUtility.GETFILENAMES);
     }
     
+    /**
+     * This method send the action for get the file.
+     */
     public void getFile(){
         send(MyUtility.GETFILE);
     }
     
+    /**
+     * This method send the action for search the file name.
+     */
     public void getFileName(){
         send(MyUtility.GETFILENAME);
     }
@@ -108,7 +114,7 @@ public class Client {
     }
     
     /**
-     * This method receive the files and return it
+     * This method send the action, receive the files and return it
      * @return 
      */
     public String[] receiveFiles() {
@@ -121,13 +127,34 @@ public class Client {
         return this.books;
     }
     
+    /**
+     * This method send the action, send the book name and receive and return the book content
+     */
     public String receiveFile(String fileName) {
         getFile();
         send(fileName);
         String book = receive();
         return book;
     }
-
+    
+        /**
+     * This method send the action, receive the files and return it
+     * @return 
+     */
+    public String[] receiveFileName(String fileName) {
+        getFileName();
+        send(fileName);
+        int size = Integer.parseInt(receive());
+        this.books = new String[size];
+        for(int i = 0 ; i < size ; i++){
+            this.books[i] = receive();
+        }
+        return this.books;
+    }
+    
+    /**
+     * This method close the socket connection.
+     */
     public void closeSocket() {
         socketUDP.close();
     }

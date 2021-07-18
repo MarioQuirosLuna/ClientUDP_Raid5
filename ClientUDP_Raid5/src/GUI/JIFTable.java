@@ -21,6 +21,7 @@ public class JIFTable extends JPanel{
         JScrollPane scroll;
 	JTable table;
 	String[] books;
+        String[] searchBooks;
 
 	public JIFTable() {
 		this.setLayout(null);
@@ -63,6 +64,11 @@ public class JIFTable extends JPanel{
 
 	}
 
+        /**
+         * This methos receive the name books from the server.
+         * Put all in a Strin array variable.
+         * And put all in the table.
+         */
         public void getBooks(){
             this.books = MainWindow.client.receiveFiles();
             DefaultTableModel defaultTableModel = (DefaultTableModel) this.table.getModel();
@@ -73,6 +79,26 @@ public class JIFTable extends JPanel{
 
 			String[] data = new String[1];
 			data[0] = this.books[i];
+			defaultTableModel.addRow(data);
+
+		}
+        }
+        
+        /**
+         * This methos receive the name books from the server, they are similar at the name that we need.
+         * Put all in a Strin array variable.
+         * And put all in the table.
+         */
+        public void getSearchBooks(String searchBook){
+            this.searchBooks = MainWindow.client.receiveFileName(searchBook);
+            DefaultTableModel defaultTableModel = (DefaultTableModel) this.table.getModel();
+
+		clean();
+
+		for (int i = 0; i < this.searchBooks.length; i++) {
+
+			String[] data = new String[1];
+			data[0] = this.searchBooks[i];
 			defaultTableModel.addRow(data);
 
 		}

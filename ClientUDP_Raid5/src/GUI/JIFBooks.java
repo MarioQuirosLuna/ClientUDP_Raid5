@@ -26,8 +26,8 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
     Create the window variables
     */
     
-    private JLabel jlbFileName;
-    private JTextField jtfFileName, jtfSearchFile;
+    private JLabel jlbFileName, jlbMetaName, jlbMetaSize;
+    private JTextField jtfFileName, jtfSearchFile, jtfMetaName, jtfMetaSize;
     private JButton btnUpload, btnGetFile, btnCancel, btnGetFileName;
     private JFileChooser jchooser = null;
     private JIFTable tablePanel;
@@ -58,6 +58,10 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
         this.setVisible(true);
     }
     
+    /**
+     * This method inicializate all the variables.
+     * And put it on the window.
+     */
     public void init() {
         
         /*
@@ -65,6 +69,10 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
         */
         
         this.jlbFileName = new JLabel("File Name");
+        this.jlbMetaSize = new JLabel("File Size");
+        this.jlbMetaName = new JLabel("File Name");
+        this.jtfMetaName = new JTextField();
+        this.jtfMetaSize = new JTextField();
         this.jtfFileName = new JTextField();
         this.jtfSearchFile = new JTextField();
         this.btnUpload = new JButton("Upload...");
@@ -74,6 +82,10 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
         this.tablePanel = new JIFTable();
         this.jtaFile = new JTextArea();
 
+        
+        /**
+        * Personalization.
+        */
         this.jlbFileName.setBounds(420, 10, 100, 30);
         this.jtfFileName.setBounds(520, 10, 200, 30);
         this.btnGetFile.setBounds(770, 10, 100, 30);
@@ -81,16 +93,33 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
         this.btnGetFileName.setBounds(170, 420, 150, 30);
         this.btnUpload.setBounds(10, 460, 100, 30);
         this.btnCancel.setBounds(10, 530, 100, 30);
-        this.jtaFile.setBounds(420, 60, 450, 490);
+        this.jlbMetaName.setBounds(420, 60, 100, 30);
+        this.jtfMetaName.setBounds(520, 60, 200, 30);
+        this.jlbMetaSize.setBounds(420, 110, 100, 30);
+        this.jtfMetaSize.setBounds(520, 110, 200, 30);
+        this.jtaFile.setBounds(420, 150, 450, 400);
         
         this.jtaFile.setBackground(Color.lightGray);
         this.jtaFile.setEditable(false);
+        this.jtaFile.setLineWrap(true);
+        this.jtfMetaName.setEditable(false);
+        this.jtfMetaSize.setEditable(false);
 
+        /**
+         * Add listeners to the buttons
+         */
         this.btnUpload.addActionListener(this);
         this.btnGetFile.addActionListener(this);
         this.btnCancel.addActionListener(this);
         this.btnGetFileName.addActionListener(this);
 
+        /**
+         * Add it to the window
+         */
+        this.add(this.jlbMetaName);
+        this.add(this.jlbMetaSize);
+        this.add(this.jtfMetaName);
+        this.add(this.jtfMetaSize);
         this.add(this.jlbFileName);
         this.add(this.jtfFileName);
         this.add(this.btnUpload);
@@ -102,11 +131,17 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
         this.add(tablePanel);
 	}
     
+    /**
+     * This method make action by the listener buttons
+     * @param e 
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
+        //Cancel button close the window.
         if (e.getSource() == this.btnCancel) {
             this.dispose();
         } else {
+            //Upload botton open a choose book window, clean the table and show the books.
             if (e.getSource() == this.btnUpload) {
                 try {
                     chooseFile();
@@ -116,18 +151,27 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
                     System.out.println("GUI.JIFBooks.actionPerformed() "+ex.toString());
                 }
             }else{
+                //This button get the file name and send to the server an action for get it.
                 if(e.getSource() == this.btnGetFile){
                     getFile();
-                    this.dispose();
                 }else{
+                    //This button send an action for get all the book names.
                     if(e.getSource() == this.btnGetFileName){
-
+                        this.tablePanel.clean();
+                        this.tablePanel.getSearchBooks(jtfSearchFile.getText());
                     }
                 }
             }
         }
     }
     
+    
+    /**
+     * This method make possible to choose a file.
+     * Send the action to the server for notify that will send a file.
+     * And call at the method that send it.
+     * @throws IOException 
+     */
     public void chooseFile() throws IOException{
         this.jchooser = new JFileChooser();
         this.jchooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -139,6 +183,13 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
         }
     }
     
+    /**
+     * This method get the properties of this file, send all of them.
+     * Join all the file content in a string.
+     * And send it.
+     * @param filePath
+     * @throws IOException 
+     */
     public void sendFile(String filePath) throws IOException{
 
         this.book = new File(filePath);
@@ -168,10 +219,19 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
         
     }
     
+    /**
+     * This method get the file name.
+     * Send at the server the action, the file name and receive the content file.
+     * Put it content in a text area to show it.
+     * Show the metadata.
+     * And save it in a file in the computer.
+     */
     public void getFile(){
         this.bookName = this.jtfFileName.getText();
         this.contentBook = MainWindow.client.receiveFile(this.bookName);
         this.jtaFile.setText(contentBook);
+        this.jtfMetaName.setText(bookName);
+        this.jtfMetaSize.setText(String.valueOf(contentBook.length()));
         createBooksFolder();
         try {
             File fileContent = new File(path+"\\"+bookName+".txt");
@@ -195,6 +255,9 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
         
     }
     
+    /**
+     * This method create the place where are going to stay all the files/books
+     */
     public void createBooksFolder(){
         
         File file = new File("Books");
