@@ -6,10 +6,6 @@
 package Client;
 
 import Utility.MyUtility;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -44,7 +40,6 @@ public class Client {
             Inicializate the variables with the srver information.
             */
             this.SERVER_PORT = port;
-            buffer = new byte[1024];
             serverAddress = InetAddress.getByName("localhost");
             UDPSocket = new DatagramSocket();
 
@@ -112,6 +107,7 @@ public class Client {
      *  This method receive the actions and sizes
      */
     public String receive() {
+        buffer = new byte[1024];
         try {
             petition = new DatagramPacket(buffer, buffer.length);
             UDPSocket.receive(petition);
