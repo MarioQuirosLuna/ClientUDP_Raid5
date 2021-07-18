@@ -37,8 +37,8 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
     */
     
     private JLabel jlbFileName;
-    private JTextField jtfFileName;
-    private JButton btnUpload, btnGetFile, btnCancel, btnGetFilesName;
+    private JTextField jtfFileName, jtfSearchFile;
+    private JButton btnUpload, btnGetFile, btnCancel, btnGetFileName;
     private JFileChooser jchooser = null;
     private JIFTable tablePanel;
     private JPanel jpFile;
@@ -72,17 +72,19 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
         
         this.jlbFileName = new JLabel("File Name");
         this.jtfFileName = new JTextField();
+        this.jtfSearchFile = new JTextField();
         this.btnUpload = new JButton("Upload...");
         this.btnGetFile = new JButton("Get File");
         this.btnCancel = new JButton("Exit");
-        this.btnGetFilesName = new JButton("Get file names");
+        this.btnGetFileName = new JButton("Search File Name");
         this.tablePanel = new JIFTable();
         this.jpFile = new JPanel();
 
         this.jlbFileName.setBounds(420, 10, 100, 30);
         this.jtfFileName.setBounds(520, 10, 200, 30);
         this.btnGetFile.setBounds(770, 10, 100, 30);
-        this.btnGetFilesName.setBounds(10, 420, 150, 30);
+        this.jtfSearchFile.setBounds(10, 420, 150, 30);
+        this.btnGetFileName.setBounds(170, 420, 150, 30);
         this.btnUpload.setBounds(10, 460, 100, 30);
         this.btnCancel.setBounds(10, 530, 100, 30);
         this.jpFile.setBounds(420, 60, 450, 490);
@@ -92,15 +94,16 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
         this.btnUpload.addActionListener(this);
         this.btnGetFile.addActionListener(this);
         this.btnCancel.addActionListener(this);
-        this.btnGetFilesName.addActionListener(this);
+        this.btnGetFileName.addActionListener(this);
 
         this.add(this.jlbFileName);
         this.add(this.jtfFileName);
         this.add(this.btnUpload);
         this.add(this.btnGetFile);
-        this.add(this.btnGetFilesName);
+        this.add(this.btnGetFileName);
         this.add(this.btnCancel);
         this.add(this.jpFile);
+        this.add(this.jtfSearchFile);
         this.add(tablePanel);
 	}
     
@@ -112,7 +115,8 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
             if (e.getSource() == this.btnUpload) {
                 try {
                     chooseFile();
-                    this.dispose();
+                    this.tablePanel.clean();
+                    this.tablePanel.getBooks();
                 } catch (IOException ex) {
                     System.out.println("GUI.JIFBooks.actionPerformed() "+ex.toString());
                 }
@@ -121,9 +125,8 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
                     //receiveFile();
                     this.dispose();
                 }else{
-                if(e.getSource() == this.btnGetFilesName){
-                    this.tablePanel.clean();
-                    this.tablePanel.getBooks();
+                if(e.getSource() == this.btnGetFileName){
+                    
                     
                 }
             }
