@@ -3,10 +3,13 @@ package GUI;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Scanner;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -199,19 +202,31 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
         MainWindow.client.send(this.bookName);
         MainWindow.client.send(String.valueOf(this.bookSize));
 
-        Scanner s = new Scanner(book);
         String contents = "";
         
 	/*
         Read line to line the file
         */
-	while (s.hasNextLine()) {
-            String line = s.nextLine();
-            /*
-            Save the line in the contents.
-            */
-            contents += line; 
-	}
+        FileReader fr = null;
+        try {
+            fr = new FileReader(book);
+            BufferedReader br = new BufferedReader(fr);
+
+            String linea;
+            while((linea=br.readLine())!=null){
+                contents += linea;
+            }
+        }catch(IOException e){
+            System.out.println("Book.read(): "+e.getMessage());
+        }finally{
+            try{                    
+                if( null != fr ){   
+                    fr.close();     
+                }                  
+            }catch (IOException e2){ 
+                System.out.println("Book.read(): "+e2.getMessage());
+            }
+        }
         
         System.out.println(contents);
         
@@ -233,6 +248,7 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
         this.jtfMetaName.setText(bookName);
         this.jtfMetaSize.setText(String.valueOf(contentBook.length()));
         createBooksFolder();
+        FileWriter fw = null;
         try {
             File fileContent = new File(path+"\\"+bookName+".txt");
         
@@ -240,12 +256,20 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
                 fileContent.createNewFile();
             }
             
-            FileWriter fw = new FileWriter(fileContent);
+            fw = new FileWriter(fileContent);
             try (BufferedWriter bw = new BufferedWriter(fw)) {
                 bw.write(contentBook);
             }
         } catch (IOException e) {
-            System.err.println("Book.Save() "+e.getMessage());
+            System.err.println("JIFBooks.GetFile() "+e.getMessage());
+        }finally{
+            try{                    
+                if( null != fw ){   
+                    fw.close();     
+                }                  
+            }catch (IOException e2){ 
+                System.out.println("JIFBooks.GetFile(): "+e2.getMessage());
+            }
         }
         
     }
