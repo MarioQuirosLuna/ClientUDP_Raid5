@@ -38,9 +38,9 @@ public class Client {
 
     public Client(int port) {
         try {
-            /*
-            Inicializate the variables with the srver information.
-            */
+            /**
+             * Inicializate the variables with the srver information.
+             */
             this.SERVER_PORT = port;
             serverAddress = InetAddress.getByName("localhost");
             socketUDP = new DatagramSocket();
@@ -52,16 +52,16 @@ public class Client {
         }
     }
     
-    /*
-    This method send the action to the server, for stock the file
-    */
+    /**
+     * This method send the action to the server, for stock the file
+     */
     public void stockFile() {
         send(MyUtility.STOCKFILE);
     }
     
-    /*
-    This method send the action to the server, for get the file names
-    */
+    /**
+     * This method send the action to the server, for get the file names
+     */
     public void getFilesNames(){
         send(MyUtility.GETFILENAMES);
     }
@@ -115,7 +115,7 @@ public class Client {
     
     /**
      * This method send the action, receive the files and return it
-     * @return 
+     * @return file names
      */
     public String[] receiveFiles() {
         getFilesNames();
@@ -137,7 +137,7 @@ public class Client {
         return book;
     }
     
-        /**
+    /**
      * This method send the action, receive the files and return it
      * @return 
      */

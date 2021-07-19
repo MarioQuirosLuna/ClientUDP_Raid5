@@ -15,9 +15,9 @@ import javax.swing.JMenuItem;
  */
 public class MainWindow extends JFrame implements ActionListener{
     
-    /*
-    Create the attributes for the menu in the main window.
-    */
+    /**
+     * Create the attributes for the menu in the main window.
+     */
     private JMenuBar jMenuBar;
     private JMenu jMenuBooks;
     private JMenuItem jmiBooks;
@@ -41,9 +41,9 @@ public class MainWindow extends JFrame implements ActionListener{
     
     public void init() {
 
-        /*
-        Inicializate the attributes
-        */
+        /**
+         * Inicializate the attributes
+         */
         
         this.jMenuBooks = new JMenu("RAID 5");
         this.jMenuBar = new JMenuBar();
@@ -67,9 +67,9 @@ public class MainWindow extends JFrame implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == this.jmiBooks) {
-            /*
-            If the boton books is pressed, go to the JIFBooks
-            */
+            /**
+             * If the boton books is pressed, go to the JIFBooks
+             */
             JIFBooks jifBooks = new JIFBooks();
             this.desktop.add(jifBooks);
         }

@@ -9,13 +9,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Scanner;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -25,9 +22,9 @@ import javax.swing.JTextField;
  */
 public class JIFBooks extends JInternalFrame implements ActionListener{
     
-    /*
-    Create the window variables
-    */
+    /**
+     * Create the window variables
+     */
     
     private JLabel jlbFileName, jlbMetaName, jlbMetaSize;
     private JTextField jtfFileName, jtfSearchFile, jtfMetaName, jtfMetaSize;
@@ -47,9 +44,9 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
 
     public JIFBooks() {
         
-        /*
-        Set the window properties
-        */
+        /**
+         * Set the window properties
+         */
         
         super("| Digital Books | Client | ");
         this.path = "Books";
@@ -87,8 +84,8 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
 
         
         /**
-        * Personalization.
-        */
+         * Personalization.
+         */
         this.jlbFileName.setBounds(420, 10, 100, 30);
         this.jtfFileName.setBounds(520, 10, 200, 30);
         this.btnGetFile.setBounds(770, 10, 100, 30);
@@ -204,9 +201,9 @@ public class JIFBooks extends JInternalFrame implements ActionListener{
 
         String contents = "";
         
-	/*
-        Read line to line the file
-        */
+	/**
+         * Read line to line the file
+         */
         FileReader fr = null;
         try {
             fr = new FileReader(book);
